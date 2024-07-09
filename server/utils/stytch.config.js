@@ -1,0 +1,1 @@
+// Initializes the Stytch client with project credentials
