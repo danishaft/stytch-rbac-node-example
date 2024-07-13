@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import {  Poppins, Rubik } from "next/font/google";
+import "../styles/globals.css";
+// import providers
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-poppins",
+});
+const rubik = Rubik({
+  subsets: ["latin"],
+  weight: "600",
+  variable: "--font-rubik",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${poppins.variable} ${rubik.variable}`}>{children}</body>
+      {/* modal div */}
     </html>
   );
 }
