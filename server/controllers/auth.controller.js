@@ -1,6 +1,6 @@
 // Methods(tasks) to be executed on routes
 const signup = (req, res)=>{ 
-	res.send("Hello, Welcome to our signup Page"); 
+	res.send("Hello, Welcome to our signup Page yeah"); 
 } 
 
 const login = (req, res)=>{ 
