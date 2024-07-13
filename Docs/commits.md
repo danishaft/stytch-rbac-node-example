@@ -27,6 +27,7 @@ scopes
 [deploy]: Deployment changes
 [core]: Redux, Endpoints, HelperFunctions
 [hooks]: Custom hooks-related changes
+[types]: Custom types-related changes
 [endpoints]: Endpoints-related changes
 [styles]: Themes and central/core CSS styles
 [store]: Zustand and global state management
