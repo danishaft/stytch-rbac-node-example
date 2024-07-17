@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${rubik.variable}`}>{children}</body>
+      <body className={`${poppins.variable} ${rubik.variable} bg-sec-bg `}>{children}</body>
       {/* modal div */}
     </html>
   );
