@@ -56,8 +56,10 @@ const config = {
         'dark1': '#2f2f31',
         'dark2': '#787486',
         'newPrimary': '#5030e5',
-        'light-primary': '##5030e533',
+        'light-primary': '#5030e533',
+        'light-secondary': '#5030e50f',
         'secGreen': '#7AC555',
+        'sec-bg': '#F5F5F5'
       },
       borderRadius: {
         lg: "var(--radius)",

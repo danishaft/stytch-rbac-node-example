@@ -66,4 +66,26 @@
     body {
       @apply bg-background text-foreground;
     }
+    /* CUSTOM CSS  */
+    .page-head-text {
+      @apply text-4xl font-bold text-dark;
+    }
+    .page-text-1 {
+      @apply text-[17px] font-semibold text-dark;
+    }
+    .page-text-2 {
+      @apply text-[15px] ;
+    }
+    .page-text-3 {
+      @apply text-[12px] ;
+    }
+    .bg-icon {
+      @apply text-newPrimary/70 hover:text-newPrimary hover:bg-light-primary rounded-sm size-7 text-center cursor-pointer;
+    }
+    /* .bg-icon > svg {
+      @apply size-full;
+    } */
+    .status {
+      @apply text-[10px] text-newPrimary bg-light-primary px-2 py-1 rounded;
+    }
   }
