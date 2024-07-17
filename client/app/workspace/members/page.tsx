@@ -1,7 +1,7 @@
 import React from 'react'
 // list all members belonging to the workspace
 
-export const WorkspaceMembers = () => {
+export default function WorkspaceMembers () {
   return (
     <div>workspace members</div>
   )
