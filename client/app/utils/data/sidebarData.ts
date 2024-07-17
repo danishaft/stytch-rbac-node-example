@@ -31,12 +31,12 @@ export const sideBarData: SideBarType[] = [
       children: [
         {
           title: "Tasks",
-          href: "/workspace/departments/tasks",
+          href: "/workspace/my_department/tasks",
         },
         {
           title: "Projects",
-          href: "/workspace/departments/projects",
+          href: "/workspace/my_department",
         },
       ],
     },
-  ]
+]
