@@ -11,3 +11,27 @@ export interface SideBarType {
     children?: SideBarChildType[];
     disabled?: boolean;
 }
+
+export interface TaskDataType {
+    taskId: string;
+    title: string;
+    status: 'todo' | 'in-progress' | 'completed';
+    assignee?: string;
+}
+
+export interface ProjectDataType {
+    projectId: string ;
+    name: string;
+    lead: string;
+    tasks: TaskDataType[];
+    description: string;
+    type: 'Public' | 'Private';
+}
+
+export interface DepartmentDataType {
+    departmentId: string;
+    identifier: string;
+    name: string;
+    projects: ProjectDataType[];
+    description: string;
+}
