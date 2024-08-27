@@ -1,0 +1,7 @@
+{
+  "cSpell.words": ["autoincrement", "signin", "signup", "stytch"],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma",
+    "editor.formatOnSave": true
+  }
+}
