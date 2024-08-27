@@ -23,16 +23,16 @@ const nextConfig = {
       },
       async redirects() {
         return [
-          {
-            source: '/',
-            destination: '/workspace/inbox',
-            permanent: true,
-          },
-          {
-            source: '/workspace',
-            destination: '/workspace/inbox',
-            permanent: true,
-          },
+          // {
+          //   source: '/',
+          //   destination: '/signin',
+          //   permanent: true,
+          // },
+          // {
+          //   source: '/workspace',
+          //   destination: '/workspace/inbox',
+          //   permanent: true,
+          // },
         ]
       },
 };
