@@ -1,0 +1,44 @@
+{
+    "roles": [
+      {
+        "role_id": "admin",
+        "permissions": [
+          {"resource_id": "department", "actions": ["*"]},
+          {"resource_id": "project", "actions": ["*"]},
+          {"resource_id": "department-project", "actions": ["*"]},
+          {"resource_id": "project-task", "actions": ["*"]},
+          {"resource_id": "department-project-task", "actions": ["*"]}
+        ]
+      },
+      {
+        "role_id": "manager",
+        "permissions": [
+          {"resource_id": "department", "actions": ["read", "update"]},
+          {"resource_id": "project", "actions": ["*"]},
+          {"resource_id": "department-project", "actions": ["*"]},
+          {"resource_id": "project-task", "actions": ["*"]},
+          {"resource_id": "department-project-task", "actions": ["*"]}
+        ]
+      },
+      {
+        "role_id": "member",
+        "permissions": [
+          {"resource_id": "department", "actions": ["read"]},
+          {"resource_id": "project", "actions": ["*"]},
+          {"resource_id": "department-project", "actions": ["read"]},
+          {"resource_id": "project-task", "actions": ["*"]},
+          {"resource_id": "department-project-task", "actions": ["read", "edit", "create"]}
+        ]
+      },
+      {
+        "role_id": "guest",
+        "permissions": [
+          {"resource_id": "department", "actions": [""]},
+          {"resource_id": "project", "actions": ["read"]},
+          {"resource_id": "department-project", "actions": [""]},
+          {"resource_id": "project-task", "actions": ["*"]},
+          {"resource_id": "department-project-task", "actions": [""]}
+        ]
+      }
+    ]
+  }
