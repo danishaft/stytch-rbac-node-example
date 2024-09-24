@@ -4,32 +4,18 @@ const prisma = new PrismaClient();
 const {  getUserRole} = require('../../helpers/user')
 
 //create organization
-const createOrgWithMember = async (organization, member) => {
+const createOrg = async (organization, member) => {
     try{
         const customRole = getUserRole(member)
         console.log(customRole)
         
-        // create org with first user
+        // create org
         const newOrganization = await prisma.organization.create({
             data: {
                 id: member.organization_id,
                 name: organization.organization_name,
                 slug: organization.organization_slug,
                 logoUrl: organization.organization_logo_url,
-                members: {
-                    create: [
-                        {
-                            id: member.member_id,
-                            name: member.name,
-                            email: member.email_address,
-                            status: member.status,
-                            role: customRole?.role_id,
-                        }
-                    ]
-                }
-            },
-            include: {
-                members: true
             }
         });
         return newOrganization;
@@ -50,13 +36,14 @@ const getOrg = async(organizationId) => {
         return organization;
     }catch(error){
         console.error(error.message)
+        throw new Error('Could not get user', error.message)
     }finally{
         await prisma.$disconnect()
     }
 }
 
 //update organization in db
-const updateOrg = async(organizationId, org, userId, departmentId, projectId) => {
+const updateOrg = async(org, member, departmentId, projectId) => {
     try{
         const updateData = {
             name: org.organization_name,
@@ -64,22 +51,18 @@ const updateOrg = async(organizationId, org, userId, departmentId, projectId) =>
             slug: org.organization_slug,
         }
     
-        if(userId) updateData.members = {connect: {id: userId}}
+        if(member) updateData.members = {connect: {id: member.member_id}}
         if(departmentId) updateData.departments = {connect: {id: departmentId}}
         if(projectId) updateData.projects = {connect: {id: projectId}}
     
         const organization = await prisma.organization.update({
-            where: {id: organizationId},
+            where: {id: member.organization_id},
             data: updateData,
-            include: {
-                members: true,
-                departments: true,
-                projects: true
-            }
         }); 
         return organization;
     }catch(error){
         console.error(error.message)
+        throw new Error('Failed to create organization and member');
     }finally{
         await prisma.$disconnect()
     }
@@ -94,6 +77,7 @@ const getAllOrgMembers = async(organizationId) => {
         return members;
     }catch(error){
         console.error(error.message)
+        throw new Error('Failed to create organization and member');
     }finally{
         await prisma.$disconnect()
     }
@@ -125,6 +109,7 @@ const updateOrCreateOrgMembers = async(members, organizationId) => {
         await Promise.all(updatePromises)
     }catch(error){
         console.error(error.message)
+        throw new Error('Failed to create organization and member');
     }finally{
         await prisma.$disconnect()
     }
@@ -132,7 +117,7 @@ const updateOrCreateOrgMembers = async(members, organizationId) => {
 
 
 module.exports = {
-    createOrgWithMember,
+    createOrg,
     getOrg,
     updateOrg,
     getAllOrgMembers,
