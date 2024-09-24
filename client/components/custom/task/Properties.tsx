@@ -4,10 +4,8 @@ import { AssignButton } from "@/components/ui/buttons/assignButton"
 
 interface TaskPropertiesProps {
     status: any
-    date: any
-    assignee: any
 }
-export const TaskProperties: React.FC<TaskPropertiesProps> = ({assignee, date, status}) => {
+export const TaskProperties = ({status}: TaskPropertiesProps) => {
   return (
     <div className="border-b-2">
         <div className="flex items-center gap-x-28 mb-3">
