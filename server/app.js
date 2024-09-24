@@ -1,61 +1,70 @@
-const bodyParser = require('body-parser')
 const express = require('express')
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
-const createHttpError = require('http-errors')
 const cors = require('cors')
-require('dotenv/config')
-const morgan = require('morgan')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const createHttpError = require('http-errors')
+require('dotenv').config()
 
 // initialize the server
 const app = express()
-app.use(
-    cors({
-        origin: process.env.APP_URL, // Replace with your frontend URL
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        credentials: true,
-    })
-)
-app.options('*', cors())
+const PORT = process.env.PORT || 4000
 
 // Middlewares
+app.use(cors({ origin: true, credentials: true }))
 app.use(cookieParser())
-app.use(morgan('dev'))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.json())
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: false }))
-// app.use(passport.initialize());
-// Session management.
-app.use(
-    session({
-        resave: true,
-        saveUninitialized: false,
-        secret: 'session-signing-secret',
-        cookie: { maxAge: 60000 },
-    })
-)
-app.use(bodyParser.json())
-app.use(express.json())
-// app.use((req, res, next) => {
-//     console.log('Incoming request:', req.method, req.path, req.headers);
-//     next();
-// });
-//middlewares
-// const authenticateStytchSessionJwt = require('./middleware/auth.middleware')
+
+app.use((req, res, next) => {
+    console.log('Incoming request:', req.method, req.path, req.headers);
+    next();
+});
+
+const StytchStrategy = require('./utils/passport.config')
+
+// Passport configuration
+passport.use(new StytchStrategy())
+app.use(passport.initialize())
 
 // Local routes
 const authRoute = require('./routes/auth')
 const orgRoute = require('./routes/organization')
 const deptRoute = require('./routes/department')
-
+const deptProjectRoute = require('./routes/department/projects')
+const deptProjectTaskRoute = require('./routes/department/projectTasks')
 
 // Routes
-app.get('/', (req, res) => {
-    res.send('Hello from the root path!')
-})
 app.use('/api/auth', authRoute)
-app.use('/api/organizations', orgRoute)
-app.use('/api/organizations/departments', deptRoute)
 
+app.use('/api/organizations', orgRoute)
+
+app.use('/api/organizations/departments', deptRoute)
+app.use('/api/organizations/departments/:deptId/projects', deptProjectRoute)
+
+app.use('/api/organizations/departments/:deptId/projects/:projectId/tasks', deptProjectTaskRoute)
+
+
+// app.use('/api/organizations/projects', )
+// app.use('/api/organizations/projects/:projectId/tasks')
+
+// app.use('api/users')
+
+// More detailed logging middleware
+// app.use((req, res, next) => {
+//     console.log({
+//       timestamp: new Date().toISOString(),
+//       method: req.method,
+//       url: req.url,
+//       headers: req.headers,
+//       body: req.body,
+//       query: req.query,
+//       params: req.params
+//     });
+//     next();
+//   });
 
 //error handlers
 app.use((req, res, next) => {
@@ -68,8 +77,6 @@ app.use((err, req, res, next) => {
     res.status(err.status).json({ error: message })
 })
 
-// Server Listen Along with Database
-const PORT = process.env.PORT || 4000
 app.listen(PORT, (err) => {
     if (err) throw err
     console.log(
