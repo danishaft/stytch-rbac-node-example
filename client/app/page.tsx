@@ -10,11 +10,9 @@ export default function Index() {
   // If the Stytch SDK detects a User then redirect to profile; for example if a logged in User navigated directly to this URL.
   useEffect(() => {
     if (isInitialized && session) {
-      router.replace('/signup');
-      // console.log('signup')
+      router.replace('/workspace/inbox');
     }else {
-        router.replace('/workspace/inbox');
-        // console.log('signup')
+        router.replace('/signup');
     }
   }, [session, isInitialized, router]);
 }

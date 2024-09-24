@@ -86,9 +86,14 @@ import {
   StytchEventType,
 } from "@stytch/vanilla-js";
 import { StytchB2B } from "@stytch/nextjs/b2b";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import fetchApi from "@/app/utils/api";
+import { OrgAndMemberResponse } from "@/app/utils";
+import { AppStores } from "@/lib/zustand";
+import { UpdateIcon } from "@radix-ui/react-icons";
 
 const Discovery = () => {
+  const router = useRouter();
   const [config] = useState<StytchB2BUIConfig>({
     authFlowType: AuthFlowType.Discovery,
     products: [B2BProducts.emailMagicLinks],
@@ -96,27 +101,66 @@ const Discovery = () => {
       sessionDurationMinutes: 60,
     },
   });
-  const router = useRouter();
+  const updateUserStore = AppStores.useUserStore((state) => state.updateUserInfo)
+  const updateOrgStore = AppStores.useOrgStore((state) => state.updateOrgInfo)
+  console.log('in authenticate')
 
   return config ? (
-    <StytchB2B
+    <div className=" container flex items-center justify-center h-screen">
+      <StytchB2B
       config={config}
       callbacks={{
-        onEvent: async ({ type, data }) => {
-          if (type === StytchEventType.B2BDiscoveryIntermediateSessionExchange) {
-            router.push('/create-org');
-          } else if (type === StytchEventType.B2BDiscoveryOrganizationsCreate) {
-            router.push("/create-org");
-          } else if (type === StytchEventType.B2BMagicLinkAuthenticate) {
-            router.push("/create-org");
-          } else if (type === StytchEventType.B2BOAuthAuthenticate) {
-            router.push("/create-org");
-          } else if (type === StytchEventType.B2BSSOAuthenticate) {
-            router.push("/create-org");
-          }
+        onEvent: async ({type, data}) => {
+            if (
+                type === StytchEventType.B2BDiscoveryIntermediateSessionExchange ||
+                type === StytchEventType.B2BDiscoveryOrganizationsCreate
+            ){
+                if(data && data.organization){
+                  console.log(data)
+                  try{
+                    const response = await fetchApi.post<OrgAndMemberResponse>(`/organizations`, {
+                      org: data.organization, 
+                      member: data.member,
+                    });
+                    console.log(response.data)
+                    if(response.data.newUser){
+                      updateUserStore(response.data.newUser)
+                      updateOrgStore(response.data.newOrg)
+                      router.replace("/register")
+                    }else {
+                        router.replace("/workspace/inbox")
+                    }
+                  }catch(error){
+                    console.log(error)
+                  }
+                    // const api = new URL("/api/organizations", process.env.NEXT_PUBLIC_API_URL);
+                    // return fetch(api, {
+                    //     method: "POST",
+                    //     headers: {
+                    //       'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify({
+                    //       org: data.organization,
+                    //       member: data.member,
+                    //     }),
+                    //     credentials: "include",
+                    // }).then(res => (
+                    //     res.json()
+                    // )).then(result => {
+                    //     if(result.isNewUser){
+                    //       router.replace("/register")
+                    //     }else {
+                    //       router.replace("/workspace/inbox")
+                    //     }
+                    // }).catch(error => {
+                    //     console.error(error);
+                    // })
+                }
+            }
         },
-      }}
-    />
+      }} 
+      />
+    </div>
   ) : null;
 };
 

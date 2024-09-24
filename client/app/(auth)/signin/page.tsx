@@ -11,6 +11,9 @@ export default function SignInPage() {
   const [config] = useState<StytchB2BUIConfig>({
     authFlowType: AuthFlowType.Discovery,
     products: [B2BProducts.emailMagicLinks],
+    // emailMagicLinksOptions: {
+    //   discoveryRedirectURL: `${window.location.origin}/authenticate`
+    // },
     sessionOptions: {
       sessionDurationMinutes: 60,
     },

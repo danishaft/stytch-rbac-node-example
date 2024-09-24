@@ -8,8 +8,8 @@ import { useAuth } from '../utils';
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const {isAuthenticated, loading} = useAuth();
+  if(!isAuthenticated) return null;
   return (
-    isAuthenticated && (
       <div className='flex min-h-screen h-full'>
         <SideBar isOpen={isOpen} />
         <div className="flex-1 h-full md:ml-[15em]">
@@ -20,6 +20,5 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         </div>
       </div>
     )
-  );
 }
 

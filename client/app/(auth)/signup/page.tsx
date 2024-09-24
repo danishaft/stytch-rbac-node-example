@@ -1,11 +1,30 @@
 'use client'
-import { StytchB2B } from '@stytch/nextjs/b2b';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { StytchB2B, useStytchMemberSession } from '@stytch/nextjs/b2b';
 import { AuthFlowType, B2BProducts, StytchB2BUIConfig } from '@stytch/vanilla-js/b2b';
-import { useEffect, useState } from 'react';
 
-export default function SignUpPage() {
-  const [config, setConfig] = useState<StytchB2BUIConfig | null>();
-  
+
+export default function SignInPage() {
+  const { session, isInitialized } = useStytchMemberSession();
+  const router = useRouter();
+  const [config] = useState<StytchB2BUIConfig>({
+    authFlowType: AuthFlowType.Discovery,
+    products: [B2BProducts.emailMagicLinks],
+    // emailMagicLinksOptions: {
+    //   discoveryRedirectURL: `${window?.location.origin}/authenticate`
+    // },
+    sessionOptions: {
+      sessionDurationMinutes: 60,
+    },
+  });
+
+  useEffect(() => {
+    if (session && isInitialized) {
+      router.replace("/workspace/inbox");
+    }
+  }, [isInitialized, session, router]);
+
   const styles = {
     hideHeaderText: true,
     container: {
@@ -18,20 +37,9 @@ export default function SignUpPage() {
       },
     },
   };
-
-  useEffect(() => {
-    setConfig({
-      authFlowType: AuthFlowType.Discovery,
-      products: [B2BProducts.emailMagicLinks],
-      sessionOptions: {
-        sessionDurationMinutes: 60,
-      },
-    })
-  }, []);
- 
+  
 
   return (
-    config ? 
     <main>
       <div className=" container flex items-center justify-center h-screen">
         <div>
@@ -39,7 +47,6 @@ export default function SignUpPage() {
           <StytchB2B config={config} styles={styles} />
         </div>
       </div>
-    </main> :
-    null
+    </main>
   );
 }
