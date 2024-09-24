@@ -15,7 +15,7 @@ datasource db {
 model Organization {
   id          String       @id // This will be the organizationId from Stytch member response
   name        String
-  slug        String       @unique
+  slug        String      
   logoUrl     String?
   members     User[]
   departments Department[]
@@ -27,10 +27,10 @@ model Organization {
 model User {
   id                             String                  @id
   name                           String
-  email                          String                  @unique
+  email                          String                
   role                           String
   status                         String
-  organization                   Organization            @relation(fields: [organizationId], references: [id])
+  organization                   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId                 String
   department                     Department?             @relation("DepartmentMembers", fields: [departmentId], references: [id])
   departmentId                   String?
@@ -50,10 +50,12 @@ model User {
 model Department {
   id             String              @id @default(uuid())
   name           String
-  organization   Organization        @relation(fields: [organizationId], references: [id])
+  description    String
+  slug           String
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  manager        User                @relation("DepartmentManager", fields: [managerId], references: [id])
-  managerId      String              @unique
+  manager        User?                @relation("DepartmentManager", fields: [managerId], references: [id])
+  managerId      String?              @unique
   members        User[]              @relation("DepartmentMembers")
   projects       DepartmentProject[]
   createdAt      DateTime            @default(now())
@@ -66,7 +68,8 @@ model Department {
 model DepartmentProject {
   id           String                  @id @default(uuid())
   name         String
-  department   Department              @relation(fields: [departmentId], references: [id])
+  description    String
+  department   Department              @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId String
   tasks        DepartmentProjectTask[]
   members      User[]                  @relation("DepartmentProjectMembers")
@@ -81,7 +84,7 @@ model DepartmentProjectTask {
   title       String
   description String?
   status      String
-  project     DepartmentProject @relation(fields: [projectId], references: [id])
+  project     DepartmentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   assignees   User[]            @relation("AssignedDepartmentProjectTasks")
   createdAt   DateTime          @default(now())
@@ -95,7 +98,7 @@ model Project {
   name           String
   description    String?
   status         String        @default("private")
-  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   manager        User          @relation("ProjectManager", fields: [managerId], references: [id])
   managerId      String
@@ -113,7 +116,7 @@ model ProjectTask {
   title       String
   description String?
   status      String   @default("todo")
-  project     Project  @relation(fields: [projectId], references: [id])
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   assignees   User[]   @relation("AssignedProjectTasks")
   createdAt   DateTime @default(now())
