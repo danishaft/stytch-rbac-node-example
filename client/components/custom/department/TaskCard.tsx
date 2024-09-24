@@ -7,15 +7,17 @@ import { TaskDates } from "../task/Date"
 import { TaskFooter } from "../task/Foot"
 
 interface TaskCardProps {
-    task: TaskDataType
+    id: string
+    title: string
     projectId: string
     departmentId: string
+    status: string
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({departmentId, projectId, task}) => {
-    const {status, title, taskId, assignee} = task
+export const TaskCard = ({departmentId, projectId, id, title, status}: TaskCardProps) => {
+  const taskId = id.slice(0, 4)
   return (
-    <Link href={`/workspace/departments/${departmentId}/${projectId}/tasks/${taskId}`} className="block w-full">
+    <Link href={`/workspace/departments/${departmentId}/${projectId}/tasks/${id}`} className="block w-full">
       <div className="flex items-center justify-between p-2 border bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)] hover:shadow-[0_0_15px_rgba(0,0,0,0.2)] transition-shadow duration-300 overflow-hidden ">
         <div className="flex items-center justify-between w-2/3 ">
             <TaskHeader id={taskId} title={title} />
