@@ -1,5 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { 
+    getAllDepartments,
+    removeDepartments, 
+    addDepartment
+} = require('../../helpers/department');
 
 // Get all departments in the organization
 const getDepartments = async (req, res) => {
@@ -9,12 +12,8 @@ const getDepartments = async (req, res) => {
             return res.status(400).json('No user found')
         }
         //get all departments 
-        const departments = await prisma.department.findMany({
-            where: {
-                organizationId: user.organizationId,
-            }
-        })
-        res.status(200).json({message: 'departments retrieved successfully ', departments });
+        const departments = await getAllDepartments(user.member.organization_id)
+        res.status(200).json({message: 'success ', departments });
     }catch(error){
         console.error(error)
         res.status(error.status_code || 500).json(
@@ -25,18 +24,14 @@ const getDepartments = async (req, res) => {
 //create a new department
 const createDepartment = async (req, res) => {
     try{
-        const { name, managerId } = req.body;
+        const body = req.body;
+        console.log('craeting dept')
         const user = req.user
         if (!user) {
             return res.status(400).json('No user found')
         }
-        const department = await prisma.department.create({
-            data: {
-                name,
-                organizationId: req.user.organizationId,
-                managerId,
-            }
-        })
+        const department = await addDepartment(body, user.member.organization_id)
+        console.log(department)
         res.status(200).json({message: 'department created successfully ', department });
     }catch(error){
         console.error(error)
@@ -49,16 +44,13 @@ const createDepartment = async (req, res) => {
 //Update department name
 const updateDepartment = async (req, res) => {
     try{
-        const { id } = req.params
-        const { name } = req.body;
+        const deptId = req.params.deptId
+        const body = req.body;
         const user = req.user
         if (!user) {
             return res.status(400).json('No user found')
         }
-        const department = await prisma.department.update({
-            where: {id},
-            data: {name}
-        })
+        const department = updateDepartment(deptId, body)
         res.status(200).json({message: 'department updated successfully', department });
     }catch(error){
         console.error(error)
@@ -68,8 +60,24 @@ const updateDepartment = async (req, res) => {
     }
 }
 
+//delete department 
+const deleteDepartment = async (req, res) => {
+    try{
+        const deptId = req.params.deptId
+        await removeDepartments(deptId)
+    }catch(error){
+        console.error(error)
+        res.status(error.status_code || 500).json(
+			error.error_type || 'Error deleting department',
+        )
+    }
+}
+
+
+
 module.exports = {
     getDepartments,
     createDepartment,
-    updateDepartment
+    updateDepartment,
+    deleteDepartment
 }

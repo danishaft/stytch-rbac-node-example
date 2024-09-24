@@ -1,35 +1,43 @@
 const { Router } = require('express')
 // controller
-const deptController = require('../../controllers/department')
+const {
+    createDepartment, 
+    getDepartments, 
+    updateDepartment,
+} = require('../../controllers/department')
 
 // middleware
-const attachUser = require('../../middleware/user.middleware')
+const {authenticateStytchSessionToken} = require('../../middleware/auth.middleware')
 const { authenticateAndAuthorize } = require('../../middleware/auth.middleware')
 
 // Initialization
 const router = Router()
-router.use(attachUser)
+router.use(authenticateStytchSessionToken)
 
 // Requests
 //get all departments
 router.get(
     '/',
     authenticateAndAuthorize('department', 'read'),
-    deptController.getDepartments
+    getDepartments
 )
 // Create department
 router.post(
     '/', 
     authenticateAndAuthorize('department', 'create'),
-    deptController.createDepartment
+    createDepartment
 )
 // Update department name
 router.put(
     '/:id',
     authenticateAndAuthorize('department', 'update'),
-    deptController.updateDepartment
+    updateDepartment
 )
-// delete department
-//update department manager
+//delete department
+router.delete(
+    '/:deptId',
+    authenticateAndAuthorize('department', 'update'),
+
+)
 
 module.exports = router
