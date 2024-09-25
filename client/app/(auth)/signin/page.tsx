@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { StytchB2B, useStytchMemberSession } from '@stytch/nextjs/b2b';
+import { StytchB2B, useStytchMemberSession, } from '@stytch/nextjs/b2b';
 import { AuthFlowType, B2BProducts, StytchB2BUIConfig } from '@stytch/vanilla-js/b2b';
 
 
