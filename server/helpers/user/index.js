@@ -45,14 +45,14 @@ const createUser = async (member, departmentId, projectId) => {
         };
         
         if(departmentId) userData.department = { connect: { id: departmentId } };
-        if(projectId) userData.project = { connect: { id: departmentId } };
+        if(projectId) userData.project = { connect: { id: projectId } };
         const user = await prisma.user.create({
             data: userData
         })
         return user;
     }catch(error){
         console.error(error.message)
-        throw new Error('Failed to create organization and member');
+        throw new Error('Failed to create user');
     }finally{
         await prisma.$disconnect()
     }
@@ -67,7 +67,7 @@ const updateUser = async (member) => {
             data: {
                 name: member.name,
                 status: member.status,
-                role: customRole?.role_id,
+                role: customRole,
             }
         })
         return user
