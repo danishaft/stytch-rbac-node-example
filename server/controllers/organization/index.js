@@ -6,7 +6,9 @@ const stytchClient = require('../../utils/stytch.config')
 const {
     updateOrg, 
     getOrg, 
-    createOrg
+    createOrg,
+    updateOrCreateOrgMembers,
+    getAllOrgMembers
 } = require('../../helpers/organization')
 
 const { 
@@ -95,6 +97,60 @@ const updateOrgAndMember = async (req, res) => {
     }
 }
 
+//get all members of the org(workspace)
+const getOrganizationMembers = async (req, res) => {
+    try {
+        const sessionToken = req.cookies.stytch_session
+        const user = req.user
+        if (!user) {
+            return res.status(400).json('No user found')
+        }
+        // get org members from stytch
+        const response = await stytchClient.organizations.members.search(
+            {
+                organization_ids: [user.member.organization_id],
+            },
+            {
+                authorization: {
+                    session_token: sessionToken,
+                },
+            }
+        )
+
+        // Update or create org members
+        await updateOrCreateOrgMembers(response.members, user.member.organization_id);
+
+        // Fetch the updated org members
+        const organizationMembers = await getAllOrgMembers(user.member.organization_id);
+        console.log(organizationMembers)
+        
+        res.status(200).json({message: 'success', organizationMembers })
+    } catch (error) {
+        console.error('Error in getOrganizationMembers controller:', error)
+        res.status(error.status_code || 500).json({
+            error: error.error_type || 'Invalid or expired session or orgId',
+            message:
+                error.message || 'An error occurred while getting org members',
+        })
+    }
+}
+
+//add member to org
+const addInvitedMember = async (req, res) => {
+    try{
+        const { member, departmentId } = req.body
+        const invitedUser = await createUser(member, departmentId)
+        res.status(200).json({ message: 'success', invitedUser })
+    }catch (error) {
+        console.error('Error in  addMemberToOrg controller:', error)
+        res.status(error.status_code || 500).json({
+            error: error.error_type || 'Invalid or expired session or orgId',
+            message:
+                error.message || 'An error occurred while adding member to org',
+        })
+    }
+}
+
 
 
 
@@ -123,53 +179,6 @@ const updateOrgAndMember = async (req, res) => {
 //     }
 // }
 
-// //get all members of the org(workspace)
-// const getOrganizationMembers = async (req, res) => {
-//     try {
-//         const user = req.user
-//         if (!user) {
-//             return res.status(400).json('No user found')
-//         }
-//         // get org members from stytch
-//         const response = await stytchClient.organizations.members.search(
-//             {
-//                 organization_ids: [user.organizationId],
-//             },
-//             {
-//                 authorization: {
-//                     session_token: req.cookies.session_token,
-//                 },
-//             }
-//         )
-//         const members = response.members.map((member) => {
-//             //get user role from stytch member object
-//             const customRole = getUserRole(member)
-//             return {
-//                 id: member.member_id,
-//                 name: member.name,
-//                 email: member.email_address,
-//                 status: member.status,
-//                 role: customRole?.role_id,
-//             }
-//         })
-
-//         // Update or create org members
-//         await updateOrCreateOrgMembers(members, user.organizationId);
-
-//         // Fetch the updated org members
-//         const organizationMembers = await getAllOrgMembers(user.organizationId);
-//         console.log(organizationMembers)
-        
-//         res.status(200).json({ organizationMembers })
-//     } catch (error) {
-//         console.error('Error in getMembers controller:', error)
-//         res.status(error.status_code || 500).json({
-//             error: error.error_type || 'Invalid or expired session or orgId',
-//             message:
-//                 error.message || 'An error occurred while getting org members',
-//         })
-//     }
-// }
 
 // //invite a member to the workspace
 // const inviteMember = async (req, res) => {
@@ -280,8 +289,9 @@ const updateOrgAndMember = async (req, res) => {
 module.exports = {
     addOrgAndMember,
     updateOrgAndMember,
+    addInvitedMember,
     // getOrganization,
-    // getOrganizationMembers,
+    getOrganizationMembers,
     // inviteMember,
     // authenticateInviteToken,
     // updateInvitedUser,
