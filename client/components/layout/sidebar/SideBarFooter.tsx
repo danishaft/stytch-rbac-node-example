@@ -1,14 +1,13 @@
 import Link from "next/link"
 import { PersonIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils"
-import { InviteMembers } from "../InviteMembers"
+import { InviteMembers } from "../../custom/organization/InviteMembers"
 import { buttonVariants } from "@/components/ui/button"
 
 
 export const SideBarFooter = () => {
   return (
     <div className=" flex flex-col border-t py-4 gap-6">
-        <InviteMembers/>
         <Link 
             href={'/workspace/members'} 
             className={cn(

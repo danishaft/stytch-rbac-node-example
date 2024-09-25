@@ -15,7 +15,6 @@ export default function DepartmentsPage() {
   const fetchDepts = AppStores.useDepartmentStore((state) => state.fetchDepartments)
   const departmentArray = AppStores.useDepartmentStore((state) => state.departments)
   const useDeptStore = AppStores.useDepartmentStore.getState() 
-  const [departments, setDepartments] = useState<DepartmentDataType[]>(departmentData)
   console.log('state', departmentArray)
 
   const handleCreateDept = async (values: ICreateDeptSchema) => {

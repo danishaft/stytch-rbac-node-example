@@ -44,7 +44,7 @@ export const SideBar: React.FC<SideBarProps> = ({ isOpen }) => {
           <SideBarNav items={sideBarData} />
         </div>
         <div className="md:hidden flex items-start justify-center mt-auto border-t py-4">
-          <UserProfile />
+          {/* <UserProfile /> */}
         </div>
       </div>
     </div>
