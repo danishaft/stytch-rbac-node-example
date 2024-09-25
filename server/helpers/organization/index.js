@@ -77,7 +77,7 @@ const getAllOrgMembers = async(organizationId) => {
         return members;
     }catch(error){
         console.error(error.message)
-        throw new Error('Failed to create organization and member');
+        throw new Error('Failed to get all org members');
     }finally{
         await prisma.$disconnect()
     }
@@ -88,19 +88,19 @@ const updateOrCreateOrgMembers = async(members, organizationId) => {
     try{
         const updatePromises = members.map((member) => {
             return prisma.user.upsert({
-                where: { id: member.id },
+                where: { id: member.member_id },
                 update: {
                     name: member.name,
-                    email: member.email,
-                    role: member.role,
+                    email: member.email_address,
+                    role: getUserRole(member),
                     status: member.status,
                     organization: { connect: { id: organizationId } },
                 },
                 create: {
-                    id: member.id,
+                    id: member.member_id,
                     name: member.name,
-                    email: member.email,
-                    role: member.role,
+                    email: member.email_address,
+                    role: getUserRole(member),
                     status: member.status,
                     organization: { connect: { id: organizationId } },
                 },
@@ -109,7 +109,7 @@ const updateOrCreateOrgMembers = async(members, organizationId) => {
         await Promise.all(updatePromises)
     }catch(error){
         console.error(error.message)
-        throw new Error('Failed to create organization and member');
+        throw new Error('Failed to update or create organization members');
     }finally{
         await prisma.$disconnect()
     }
