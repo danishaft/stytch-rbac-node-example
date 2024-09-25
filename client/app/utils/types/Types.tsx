@@ -44,6 +44,7 @@ export interface Organization {
     name: string;
     slug: string;
     logoUrl?: string;
+    members?: User[]
     createdAt: string;
     updatedAt: string;
 }
