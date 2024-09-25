@@ -7,7 +7,9 @@ const { Router } = require('express')
 // controller
 const {
     addOrgAndMember, 
-    updateOrgAndMember
+    updateOrgAndMember,
+    getOrganizationMembers,
+    addInvitedMember
 } = require('../../controllers/organization')
 
 //middleware
@@ -22,6 +24,11 @@ router.use(authenticateStytchSessionToken)
 router.post('/', addOrgAndMember)
 //update org and user
 router.put('/', updateOrgAndMember)
+
+//get all members of an org
+router.get('/members', getOrganizationMembers)
+//create member and add to org
+router.post('/members', addInvitedMember)
 
 
 
