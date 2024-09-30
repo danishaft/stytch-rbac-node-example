@@ -57,7 +57,7 @@ export default function DepartmentDetails ({params}: DepartmentDetailsProps) {
           <ProjectCard 
             key={deptProject.id} 
             departmentId={departmentId} 
-            deptSlug={`${department?.slug}`} 
+            identifier={`${department?.slug}`} 
             id={deptProject.id} 
             name={deptProject.name} 
             description={deptProject.description} 

@@ -1,7 +1,7 @@
 'use client'
 import { departmentData } from "@/app/utils/data/departmentData";
 import { TaskDataType } from "@/app/utils/types/Types";
-import { EditTask } from "@/components/custom/public-project";
+import { EditTask } from "@/components/custom/projects";
 import { Attachements, Comments, Description, TaskProperties } from "@/components/custom/task";
 import { TooltipButton } from "@/components/ui/buttons/tooltipButton";
 import { PageBody, PageHead, PageWrapper } from "@/components/wrappers";
