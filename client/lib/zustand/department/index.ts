@@ -1,5 +1,3 @@
-import { CreateDepartmentProject } from '@/components/custom/department';
-import axios from "axios";
 import { create, useStore } from "zustand";
 import { initialState } from "./types";
 import { createJSONStorage, persist } from "zustand/middleware";
