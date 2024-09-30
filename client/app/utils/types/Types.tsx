@@ -39,12 +39,13 @@ export interface DepartmentDataType {
 
 // ////////////////////////////////////////////////**
  
+
 export interface Organization {
     id: string;
     name: string;
     slug: string;
-    logoUrl?: string;
-    members?: User[]
+    logoUrl: string;
+    members: User[]
     createdAt: string;
     updatedAt: string;
 }
@@ -83,7 +84,7 @@ export interface DepartmentProject {
 export interface DepartmentProjectTask {
     id: string;
     title: string;
-    description?: string;
+    description: string;
     status: string;
     projectId: string;
     assignees: User[];
@@ -94,7 +95,7 @@ export interface DepartmentProjectTask {
 export interface Project {
     id: string;
     name: string;
-    description?: string;
+    description: string;
     status: string;
     organizationId: string;
     managerId: string;
@@ -103,7 +104,7 @@ export interface Project {
     updatedAt: string;
   }
   
-  interface ProjectTask {
+export interface ProjectTask {
     id: string;
     title: string;
     description?: string;
