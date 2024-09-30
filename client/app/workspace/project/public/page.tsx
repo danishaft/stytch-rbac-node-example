@@ -2,7 +2,7 @@
 'use client'
 import { projectData } from "@/app/utils/data/projectData";
 import { ProjectDataType } from "@/app/utils/types/Types";
-import { CreatePublicProject, ProjectCard } from "@/components/custom/public-project";
+import { CreatePublicProject, ProjectCard } from "@/components/custom/projects";
 import { TooltipButton } from "@/components/ui/buttons/tooltipButton";
 import { PageBody, PageHead, PageWrapper } from "@/components/wrappers";
 import { MixerHorizontalIcon, PlusIcon } from "@radix-ui/react-icons";
