@@ -27,15 +27,15 @@ export const sideBarData: SideBarType[] = [
       ],
     },
     {
-      title: "Department",
+      title: "Private",
       children: [
         {
-          title: "Tasks",
-          href: "/workspace/my_department/tasks",
+          title: "Projects",
+          href: "/workspace/project/personal",
         },
         {
-          title: "Projects",
-          href: "/workspace/my_department",
+          title: "Tasks",
+          href: "/workspace/project/personal/tasks",
         },
       ],
     },
