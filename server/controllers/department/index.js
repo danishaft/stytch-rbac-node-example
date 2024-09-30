@@ -1,7 +1,8 @@
 const { 
     getAllDepartments,
     removeDepartments, 
-    addDepartment
+    addDepartment,
+    updateDeptDetails
 } = require('../../helpers/department');
 
 // Get all departments in the organization
@@ -50,7 +51,7 @@ const updateDepartment = async (req, res) => {
         if (!user) {
             return res.status(400).json('No user found')
         }
-        const department = updateDepartment(deptId, body)
+        const department = updateDeptDetails(deptId, body)
         res.status(200).json({message: 'department updated successfully', department });
     }catch(error){
         console.error(error)

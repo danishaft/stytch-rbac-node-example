@@ -6,12 +6,12 @@ const {
 //get all department project task
 const getAllDeptProjectTasks = async (req, res) => {
     try {
-        const projectId = req.params.projectId
+        const {projectId} = req.params
         const deptProjectTasks = await getDeptProjectTasks(projectId)
         res.status(200).json({ message: 'success', deptProjectTasks})
     } catch (error) {
         res.status(error.status_code || 500).json({
-            error: error.error_type || 'Invalid or expired session or deptId',
+            error: error.error_type || 'Invalid or expired session or projectId',
             message: error.message || 'An error occurred while getting department-projects',
         })
     }
@@ -21,7 +21,7 @@ const getAllDeptProjectTasks = async (req, res) => {
 const createDeptProjectTask = async (req, res) => {
     try{
         const {deptId, projectId} = req.params
-        const body = req.body;
+        const {body} = req.body;
         console.log('craeting dept project task', deptId, projectId)
         const user = req.user
         if (!user) {
@@ -33,7 +33,7 @@ const createDeptProjectTask = async (req, res) => {
     }catch(error){
         console.error(error)
         res.status(error.status_code || 500).json(
-			error.error_type || 'Error creating department',
+			error.error_type || 'Error creating department project task',
         )
     }
 }

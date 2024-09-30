@@ -30,14 +30,16 @@ passport.use(new StytchStrategy())
 app.use(passport.initialize())
 
 // Local routes
-const authRoute = require('./routes/auth')
+// const authRoute = require('./routes/auth')
 const orgRoute = require('./routes/organization')
 const deptRoute = require('./routes/department')
 const deptProjectRoute = require('./routes/department/projects')
 const deptProjectTaskRoute = require('./routes/department/projectTasks')
+const projectRoute = require('./routes/project')
+const projectTaskRoute = require('./routes/project/tasks')
 
 // Routes
-app.use('/api/auth', authRoute)
+// app.use('/api/auth', authRoute)
 
 app.use('/api/organizations', orgRoute)
 
@@ -47,8 +49,9 @@ app.use('/api/organizations/departments/:deptId/projects', deptProjectRoute)
 app.use('/api/organizations/departments/:deptId/projects/:projectId/tasks', deptProjectTaskRoute)
 
 
-// app.use('/api/organizations/projects', )
-// app.use('/api/organizations/projects/:projectId/tasks')
+app.use('/api/organizations/projects', projectRoute)
+app.use('/api/organizations/projects/:projectId/tasks', projectTaskRoute)
+
 
 // app.use('api/users')
 

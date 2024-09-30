@@ -18,7 +18,10 @@ router.use(authenticateStytchSessionToken)
 //Requests
 
 //get all dept project task
-router.get('/', getAllDeptProjectTasks)
+router.get(
+    '/', 
+    authenticateAndAuthorize('department-project-task', 'read'),
+    getAllDeptProjectTasks)
 
 //create dept project task
 router.post(

@@ -16,7 +16,7 @@ const {
 const {authenticateStytchSessionToken} = require('../../middleware/auth.middleware')
 
 // Initialization
-const router = Router()
+const router = Router({ mergeParams: true });
 router.use(authenticateStytchSessionToken)
 
 // Requests

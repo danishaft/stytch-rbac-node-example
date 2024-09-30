@@ -1,24 +1,76 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+//get all public projects in db
+const getPublicProjects = async (organizationId) => {
+    try{
+        const projects = await prisma.project.findMany({
+            where: {
+                organizationId,
+                status: 'public',
+            }
+        })
+        return projects
+    }catch(error){
+        console.error(error.message)
+        throw new Error('Could not get all public projects', error.message)
+    }finally{
+        await prisma.$disconnect();
+    }
+}
+//get all private projects in db
+const getPrivateProjects = async (organizationId, managerId) => {
+    try{
+        const projects = await prisma.project.findMany({
+            where: {
+                organizationId,
+                managerId,
+                status: 'private'
+            }
+        })
+        return projects
+    }catch(error){
+        console.error(error.message)
+        throw new Error('Could not get all private projects', error.message)
+    }finally{
+        await prisma.$disconnect();
+    }
+}
 //create a new project in db
-const createProject = async (name, description, organizationId, managerId) => {
-    const newProject = await prisma.project.create({
-        data: {
+const addProject = async (data, managerId, orgId) => {
+    try{
+        const { name, description, members = [] } = data;
+        const allMembers = [managerId, ...members];
+        const status = allMembers.length > 1 ? "public" : "private";
+        const projectData = {
             name,
             description,
-            organization: {connect: {id: organizationId}},
-            manager: {connect: {id: managerId}},
-            members: {connect: {id: managerId}} // Add the manager as the first member
-        },
-        include: {
-            manager: true,
-            members: true,
-            tasks: true
-        }
-    })
-    return newProject;
+            status,
+            organization: {
+                connect: { id: orgId }
+            },
+            manager: {
+                connect: { id: managerId }
+            },
+            members: {
+                connect: allMembers.map(memberId => ({ id: memberId }))
+            }
+        };
+
+        const project = await prisma.project.create({
+            data: projectData
+        })
+        return project
+    }catch (error){
+        console.error(error.message)
+        throw new Error('Could not create project', error.message)
+    }finally{
+        await prisma.$disconnect()
+    }
 }
+
+
+
 
 //add new member to a project in db
 const addMemberToProject = async(projectId, userId) => {
@@ -38,6 +90,10 @@ const addMemberToProject = async(projectId, userId) => {
 }
 
 module.exports = {
-    createProject,
+    addProject,
+    getPublicProjects,
+    getPrivateProjects,
+    // updateProjectDetails,
+    // removeProject,
     addMemberToProject
 }

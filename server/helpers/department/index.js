@@ -48,7 +48,7 @@ const addDepartment = async (dept, orgId) => {
     }
 }
 
-const updateDepartment = async (deptId, dept) => {
+const updateDeptDetails = async (deptId, dept) => {
     try{
         const department = await prisma.department.update({
             where: {id: deptId},
@@ -80,6 +80,6 @@ const removeDepartments = async (deptId) => {
 module.exports ={
     getAllDepartments,
     addDepartment,
-    updateDepartment,
+    updateDeptDetails,
     removeDepartments
 }

@@ -11,7 +11,7 @@ const {authenticateStytchSessionToken} = require('../../middleware/auth.middlewa
 const { authenticateAndAuthorize } = require('../../middleware/auth.middleware')
 
 // Initialization
-const router = Router()
+const router = Router({ mergeParams: true });
 router.use(authenticateStytchSessionToken)
 
 // Requests
@@ -36,7 +36,7 @@ router.put(
 //delete department
 router.delete(
     '/:deptId',
-    authenticateAndAuthorize('department', 'update'),
+    authenticateAndAuthorize('department', 'delete'),
 
 )
 
