@@ -87,6 +87,7 @@ export const useProjectStore = create(
             },
             getProject: (projectId) => {
                 const projects = [...get().privateProjects, ...get().publicProjects]
+                console.log
                 const project = projects.find((p) => p?.id === projectId)
                 return project;
             },

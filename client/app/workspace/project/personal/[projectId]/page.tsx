@@ -1,3 +1,4 @@
+'use client'
 import { CreateTask } from '@/components/custom/projects';
 import { TooltipButton } from '@/components/ui/buttons/tooltipButton';
 import { PageBody, PageHead, PageWrapper } from '@/components/wrappers';
@@ -5,6 +6,7 @@ import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import React, { useEffect } from 'react'
 import { createProjectTaskSchema, createProjectTaskValues, ICreateProjectTaskSchema } from '../../validation';
 import { AppStores } from '@/lib/zustand';
+import { TaskCard } from '@/components/custom/TaskCard';
 
 interface PersonalProjectProps {
     params: {
@@ -22,13 +24,15 @@ export default function PersonalProjectDetails({params}:PersonalProjectProps ) {
 
     const handleCreateProjectTask = async (values: ICreateProjectTaskSchema) => {
         createProjectTask(values, projectId)
+        console.log('creating', projectTasks)
     }
     useEffect(() => {
         fetchProjectTask(projectId)
     }, [])
+
   return (
     <PageWrapper>
-        <PageHead name={`${project(projectId)?.name}-${project(projectId).status}`}>
+        <PageHead name={`${project(projectId)?.name}-${project(projectId)?.status}`}>
             <div className="flex items-center justify-between gap-5">
                 <TooltipButton icon={PlusIcon} tip="Invite"/>
                 <TooltipButton icon={TrashIcon} tip="Delete"/>
@@ -42,7 +46,16 @@ export default function PersonalProjectDetails({params}:PersonalProjectProps ) {
         </PageHead>
         <PageBody>
             {/*  */}
-            <div>lllll</div>
+            {projectTasks.map(task => 
+                <TaskCard
+                    key={task.id}
+                    id={task.id}
+                    projectId={projectId}
+                    title={task.title}
+                    status={task.status}
+                    identifier={project(projectId)?.status}
+                />
+            )}
         </PageBody>
     </PageWrapper>
   )

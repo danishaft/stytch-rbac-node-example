@@ -1,7 +1,7 @@
 'use client'
 import { departmentData } from "@/app/utils/data/departmentData";
 import { DepartmentDataType } from "@/app/utils/types/Types";
-import { CreateDepartmentProject, ProjectCard } from "@/components/custom/department";
+import { CreateDepartmentProject } from "@/components/custom/department";
 import { TooltipButton } from "@/components/ui/buttons/tooltipButton";
 import { PageBody, PageHead, PageWrapper } from "@/components/wrappers";
 import { AppStores } from "@/lib/zustand";
@@ -9,6 +9,7 @@ import { MixerHorizontalIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 import { notFound } from "next/navigation"
 import { useEffect, useState } from "react";
 import { createDeptProjectSchema, createDeptProjectValues, ICreateDeptProjectSchema } from "./validations";
+import { ProjectCard } from "@/components/custom/ProjectCard";
 
 interface DepartmentDetailsProps {
     params: {

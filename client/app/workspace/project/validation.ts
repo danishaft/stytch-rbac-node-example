@@ -5,12 +5,28 @@ export const createProjectValues = {
     name: '',
     description: ''
 }
+export const createPublicProjectValues = {
+  name: '',
+  description: '',
+  members: []
+}
+
+
 export const createProjectSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
 })
 
+
+export const createPublicProjectSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  members: z.any().array()
+})
+
 export type ICreateProjectSchema = z.infer<typeof createProjectSchema>;
+
+export type IcreatePublicProjectSchema = z.infer<typeof createPublicProjectSchema>
 
 
 export const createProjectTaskValues = {

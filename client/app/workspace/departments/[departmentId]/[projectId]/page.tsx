@@ -6,7 +6,7 @@
 import { departmentData } from "@/app/utils/data/departmentData";
 import { ProjectDataType } from "@/app/utils/types/Types";
 import { CreateTask } from "@/components/custom/department";
-import { TaskCard } from "@/components/custom/department/TaskCard";
+import { TaskCard } from "@/components/custom/TaskCard";
 import { TooltipButton } from "@/components/ui/buttons/tooltipButton";
 import { PageBody, PageHead, PageWrapper } from "@/components/wrappers";
 import { AppStores } from "@/lib/zustand";

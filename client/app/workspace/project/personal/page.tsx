@@ -1,12 +1,12 @@
 'use client'
-import { CreateProject } from '@/components/custom/projects'
+import { CreatePrivateProject, CreatePublicProject,  } from '@/components/custom/projects'
 import { TooltipButton } from '@/components/ui/buttons/tooltipButton'
 import { PageBody, PageHead, PageWrapper } from '@/components/wrappers'
 import { MixerHorizontalIcon, TrashIcon } from '@radix-ui/react-icons'
 import React, { useEffect } from 'react'
 import { createProjectSchema, createProjectValues, ICreateProjectSchema } from '../validation'
 import { AppStores } from '@/lib/zustand'
-import { ProjectCard } from '@/components/custom/department'
+import { ProjectCard } from '@/components/custom/ProjectCard'
 
 export default function PersonalProjects() {
   const createProject = AppStores.useProjectStore((state) => state.createProject)
@@ -28,7 +28,7 @@ export default function PersonalProjects() {
         <div className="flex items-center justify-between gap-5">
           <TooltipButton icon={MixerHorizontalIcon} tip="Filter"/>
           <TooltipButton icon={TrashIcon} tip="Delete"/>
-          <CreateProject
+          <CreatePrivateProject
             defaultValues={createProjectValues}
             onSubmit={handleCreateProject}
             schema={createProjectSchema}
