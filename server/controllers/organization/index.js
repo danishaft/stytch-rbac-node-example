@@ -14,9 +14,39 @@ const {
 const { 
     getUser, 
     createUser, 
-    updateUser 
+    updateUser ,
+    deleteAUser
 } = require('../../helpers/user')
 
+
+//delete a member
+const deleteMember = async (req, res) => {
+    try{
+        const sessionToken = req.cookies.stytch_session
+        const { member } = req.user
+        const {id} = req.params
+        await stytchClient.organizations.members.delete(
+            {
+                organization_id: member?.organization_id,
+                member_id: id,
+            },
+            {
+                authorization: {
+                    session_token: sessionToken,
+                },
+            }
+        )
+        await deleteAUser(id)
+        res.status(200).json({
+            message: 'success',
+        })
+    }catch (error) {
+        res.status(error.status_code || 500).json({
+            error: error.error_type || 'Invalid or expired session or orgId',
+            message: error.message || 'An error occurred while deleting member',
+        })
+    }
+}
 
 //create organization and user
 const addOrgAndMember = async (req, res) => {
@@ -290,6 +320,7 @@ module.exports = {
     addOrgAndMember,
     updateOrgAndMember,
     addInvitedMember,
+    deleteMember,
     // getOrganization,
     getOrganizationMembers,
     // inviteMember,

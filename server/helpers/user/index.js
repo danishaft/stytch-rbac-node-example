@@ -94,9 +94,26 @@ const getUser = async (userId) => {
     }
 }
 
+const deleteAUser = async (userId) => {
+    try{
+        const user = await prisma.user.delete({
+            where: {
+                id: userId,
+            }
+        })
+        return user;
+    }catch(error){
+        console.error(error.message);
+        throw new Error('Failed to delete member');
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
 module.exports = {
     getUserRole,
     getUser,
     createUser,
-    updateUser
+    updateUser,
+    deleteAUser
 }

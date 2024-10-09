@@ -9,7 +9,8 @@ const {
     addOrgAndMember, 
     updateOrgAndMember,
     getOrganizationMembers,
-    addInvitedMember
+    addInvitedMember,
+    deleteMember
 } = require('../../controllers/organization')
 
 //middleware
@@ -29,6 +30,9 @@ router.put('/', updateOrgAndMember)
 router.get('/members', getOrganizationMembers)
 //create member and add to org
 router.post('/members', addInvitedMember)
+
+//delete a member from an org
+router.delete('/members/:id', deleteMember)
 
 
 
