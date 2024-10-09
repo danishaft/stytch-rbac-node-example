@@ -15,6 +15,7 @@ interface OrgStore  {
   resetInfo: () => void;
   fetchOrgMembers: () => Promise<void>;
   addInvitedMember: (data: Partial<User>, departmentId: string) => Promise<void>;
+  deleteMember: (memberId: string) => Promise<void>;
 };
 
 export const useOrgStore = create(
@@ -49,7 +50,20 @@ export const useOrgStore = create(
         }catch(error: any){
           set({ error: error.message, loading: false });
         }
-      }
+      },
+      deleteMember: async (memberId) => {
+        set({ loading: true, error: null });
+        try{
+          const response = await fetchApi.delete(`/organizations/members/${memberId}`);
+          console.log(response)
+          set((state) => ({
+            orgMembers: state.orgMembers.filter((member) => member.id !== memberId),
+            loading: false
+          }))
+        }catch(error: any){
+          set({ error: error.message, loading: false });
+        }
+      },
     }),
     {
       name: "organization",

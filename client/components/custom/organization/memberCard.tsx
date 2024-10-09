@@ -6,6 +6,9 @@ import { TaskHeader } from "../task/Head"
 import { TaskDates } from "../task/Date"
 import { TaskFooter } from "../task/Foot"
 import { Status } from "../task"
+import { Button } from "@/components/ui/button"
+import { AppStores } from "@/lib/zustand"
+import { useStytchIsAuthorized } from "@stytch/nextjs/b2b"
 
 interface MemberCardProps {
     id: string;
@@ -17,6 +20,15 @@ interface MemberCardProps {
 
 export const MemberCard = ({email, role, id, status, name}: MemberCardProps) => {
   const taskId = id.slice(0, 4)
+  const orgStore = AppStores.useOrgStore.getState()
+  const user = AppStores.useUserStore((state) => state.userInfo)
+  const deleteMember = () => {
+    orgStore.deleteMember(id)
+  }
+
+  const {isAuthorized} = useStytchIsAuthorized('stytch.member', 'delete');
+  const canDelete = user.id === id && isAuthorized
+
   return (
     <div className="flex items-center w-full justify-between p-2 border-b border-t overflow-hidden ">
         <div className="flex items-center space-x-2 ">
@@ -28,9 +40,7 @@ export const MemberCard = ({email, role, id, status, name}: MemberCardProps) => 
         </div>
         <span className="text-xl font-medium">{role}</span>
         <Status status={status}/>
-        <button className="text-gray-400 hover:text-gray-600">
-            <DotsVerticalIcon className="w-5 h-5" />
-        </button>
+        <Button disabled={canDelete} onClick={deleteMember}>delete</Button>
     </div>
   )
 }

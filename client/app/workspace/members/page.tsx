@@ -5,11 +5,13 @@ import { AppStores } from '@/lib/zustand'
 import React, { useEffect } from 'react'
 import { IinviteToOrgSchema, inviteToOrgSchema, inviteToOrgValues } from './validations'
 import { PageBody, PageHead, PageWrapper } from '@/components/wrappers'
-import { useMemberServices } from '@/lib/stytchService'
 import { MemberCard } from '@/components/custom/organization/memberCard'
+import { useMemberServices } from '@/app/utils'
+import { useStytchMember } from '@stytch/nextjs/b2b'
 // list all members belonging to the workspace
 
 export default function WorkspaceMembers () {
+  const {member: stytchMember, isInitialized} = useStytchMember();
   const {invite} = useMemberServices()
   const fetchMembers = AppStores.useOrgStore((state) => state.fetchOrgMembers)
   const addInvitedMember = AppStores.useOrgStore((state) => state.addInvitedMember)
@@ -24,6 +26,7 @@ export default function WorkspaceMembers () {
     console.log('invitedmember', invitedMember)
     addInvitedMember(invitedMember.member, values.departmentId)
   }
+  const {getRole} = useMemberServices()
 
   useEffect(() => {
     fetchMembers()
@@ -50,7 +53,7 @@ export default function WorkspaceMembers () {
               id={member.id}
               email={member.email}
               name={member.name}
-              role={member.role}
+              role={stytchMember ? getRole(stytchMember) : ''}
               status={member.status}
             />
         )}
