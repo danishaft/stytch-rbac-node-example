@@ -15,7 +15,7 @@ interface DepartmentStore  {
   createDepartment: (data: Partial<Department>) => Promise<void>;
   fetchDepartments: () => Promise<void>;
   updateDepartment: (orgId: string, deptId: string, data: Partial<Department>) => Promise<void>;
-  removeDepartment: (orgId: string, deptId: string) => Promise<void>;
+  removeDepartment: (deptId: string) => Promise<void>;
   
   createDepartmentProject: (data: Partial<DepartmentProject>, deptId: string) => Promise<void>;
   getDepartmentProject: (projectId: string) => void
@@ -69,18 +69,21 @@ export const useDepartmentStore = create(
       updateDepartment: async (orgId, deptId, data) => {
         set({ loading: true, error: null });
         try{
-          const response = await fetchApi.put(`/api/organizations/${orgId}/departments/${deptId}`, data);
+          const response = await fetchApi.put(`/organizations/departments/${deptId}`, data);
           set({ departments: response.data, loading: false });
         }catch(error: any){
           set({ error: error.message, loading: false });
         }
       },
 
-      removeDepartment: async (orgId, deptId) => {
+      removeDepartment: async (deptId) => {
         set({ loading: true, error: null });
         try{
-          const response = await fetchApi.delete(`/api/organizations/${orgId}/departments/${deptId}`);
-          set({ departments: response.data, loading: false });
+          const response = await fetchApi.delete(`/organizations/departments/${deptId}`);
+          set((state) => ({
+            departments: state.departments.filter((department) => department.id !== deptId),
+            loading: false
+          }));
         }catch(error: any){
           set({ error: error.message, loading: false });
         }

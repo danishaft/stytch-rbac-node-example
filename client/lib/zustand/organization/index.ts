@@ -55,7 +55,6 @@ export const useOrgStore = create(
         set({ loading: true, error: null });
         try{
           const response = await fetchApi.delete(`/organizations/members/${memberId}`);
-          console.log(response)
           set((state) => ({
             orgMembers: state.orgMembers.filter((member) => member.id !== memberId),
             loading: false

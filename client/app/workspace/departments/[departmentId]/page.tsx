@@ -1,4 +1,6 @@
 'use client'
+import { useRouter } from 'next/navigation';
+import { useStytchIsAuthorized } from "@stytch/nextjs/b2b"
 import { departmentData } from "@/app/utils/data/departmentData";
 import { DepartmentDataType } from "@/app/utils/types/Types";
 import { CreateDepartmentProject } from "@/components/custom/department";
@@ -23,10 +25,9 @@ export default function DepartmentDetails ({params}: DepartmentDetailsProps) {
   const createDeptProject = AppStores.useDepartmentStore((state) => state.createDepartmentProject)
   const fetchDeptProjects = AppStores.useDepartmentStore((state) => state.fetchDepartmentProjects)
   const allDeptProjects = AppStores.useDepartmentStore((state) => state.departmentProjects)
-  const useDeptProjectStore = AppStores.useDepartmentStore.getState()
+  const useDeptStore = AppStores.useDepartmentStore.getState()
   const department  = allDepartments.find((department) => department.id === departmentId)
   const departmentProjects = allDeptProjects.filter((project) => project.departmentId === departmentId)
-  console.log('state', departmentProjects, department)
     
     const handleCreateDeptProject = async (values: ICreateDeptProjectSchema) => {
       createDeptProject(values, departmentId)
@@ -43,12 +44,11 @@ export default function DepartmentDetails ({params}: DepartmentDetailsProps) {
       <PageHead name={`${department?.name}`}>
         <div className="flex items-center justify-between gap-5">
             <TooltipButton icon={MixerHorizontalIcon} tip="Filter"/>
-            <TooltipButton icon={TrashIcon} tip="Delete"/>
             <CreateDepartmentProject
               defaultValues={createDeptProjectValues}
               onSubmit={handleCreateDeptProject}
               schema={createDeptProjectSchema}
-              isLoading={useDeptProjectStore.loading}
+              isLoading={useDeptStore.loading}
             />
         </div>
       </PageHead>

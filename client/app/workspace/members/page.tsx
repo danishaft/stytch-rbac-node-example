@@ -18,7 +18,7 @@ export default function WorkspaceMembers () {
   const membersArray = AppStores.useOrgStore((state) => state.orgMembers)
   const orgStore = AppStores.useOrgStore((state) => state.orgInfo)
   const allDepartments = AppStores.useDepartmentStore((state) => state.departments)
-  console.log('member state', membersArray)
+ 
 
   const handleInviteToOrg = async (values: IinviteToOrgSchema) => {
     // invite

@@ -8,7 +8,6 @@ import { MixerHorizontalIcon, PlusIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { createDeptSchema, createDeptValues, ICreateDeptSchema } from "./validation";
 import { AppStores } from "@/lib/zustand";
-import fetchApi from "@/app/utils/api";
 
 export default function DepartmentsPage() {
   const createDept = AppStores.useDepartmentStore((state) => state.createDepartment)

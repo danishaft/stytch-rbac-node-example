@@ -20,10 +20,10 @@ interface MemberCardProps {
 
 export const MemberCard = ({email, role, id, status, name}: MemberCardProps) => {
   const taskId = id.slice(0, 4)
-  const orgStore = AppStores.useOrgStore.getState()
+  const useOrgStore = AppStores.useOrgStore.getState()
   const user = AppStores.useUserStore((state) => state.userInfo)
   const deleteMember = () => {
-    orgStore.deleteMember(id)
+    useOrgStore.deleteMember(id)
   }
 
   const {isAuthorized} = useStytchIsAuthorized('stytch.member', 'delete');

@@ -5,15 +5,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../too
 interface TooltipButtonProps {
     icon: React.ComponentType<any>
     tip: string
+    disabled?: boolean
+    onClick?: () => void
+
 }
 
-export const TooltipButton: React.FC<TooltipButtonProps> = ({icon: Icon, tip}) => {
+export const TooltipButton: React.FC<TooltipButtonProps> = ({icon: Icon, tip, disabled, onClick}) => {
   return (
     <>
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button size={"icon"} variant={"tooltip"}><Icon/> </Button>
+                    <Button disabled={disabled} size={"icon"} variant={"tooltip"} onClick={onClick}><Icon/> </Button>
                 </TooltipTrigger>
                 <TooltipContent side={"bottom"} className="bg-light-primary text-newPrimary border-light-primary border">
                     <p>{tip}</p>
