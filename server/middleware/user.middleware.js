@@ -1,12 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const {getAuthenticatedUserInfo} = require('../helpers/auth/index')
+// const {getAuthenticatedUserInfo} = require('../helpers/auth/index')
 
 // Middleware to attach user to request
-const attachUser = async (req, res, next) => {
+const attachUserInfo = async (req, res, next) => {
     try{
-        const {member} = await getAuthenticatedUserInfo({req})
-        req.user = await prisma.user.findUnique({
+        const {member} = req.user
+        req.userInfo = await prisma.user.findUnique({
             where: {
                 id: member.member_id,
             }
@@ -19,4 +19,6 @@ const attachUser = async (req, res, next) => {
     }
 };
 
-module.exports = attachUser
+module.exports = {
+    attachUserInfo
+}

@@ -58,7 +58,6 @@ const authenticateStytchSessionToken = (req, res, next) => {
 //  under the hood.
 const authenticateAndAuthorize = (resource, action) => {
     return async (req, res, next) => {
-        console.log('in authenticateAndAuthorize', req.user)
         const user = req.user
         if (!user) {
             return res.status(400).json('No user found')
