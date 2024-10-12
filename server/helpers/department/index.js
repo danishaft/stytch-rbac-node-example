@@ -1,12 +1,23 @@
 const { PrismaClient } = require('@prisma/client');
+const { getUserRole } = require('../user');
 const prisma = new PrismaClient();
 
 // Get all departments in the db
-const getAllDepartments = async (organizationId) => {
+const getAllDepartments = async (member, departmentId) => {
     try{
+        const role = getUserRole(member)
+        let department;
+        if(role !== 'stytch_admin'){
+            department = await prisma.department.findUnique({
+                where: {
+                    id: departmentId
+                }
+            })
+            return department
+        }
         const departments = await prisma.department.findMany({
             where: {
-                organizationId,
+                organizationId: member.organization_id,
             }
         })
         return departments
@@ -67,7 +78,6 @@ const removeDepartments = async (deptId) => {
     try{
         await prisma.department.delete({
             where: {id: deptId},
-            
         })
     }catch (error){
         console.error(error.message)

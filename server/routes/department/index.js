@@ -4,15 +4,17 @@ const {
     createDepartment, 
     getDepartments, 
     updateDepartment,
+    deleteDepartment
 } = require('../../controllers/department')
 
 // middleware
-const {authenticateStytchSessionToken} = require('../../middleware/auth.middleware')
-const { authenticateAndAuthorize } = require('../../middleware/auth.middleware')
+const { authenticateAndAuthorize, authenticateStytchSessionToken } = require('../../middleware/auth.middleware')
+const {attachUserInfo} = require('../../middleware/user.middleware')
 
 // Initialization
 const router = Router({ mergeParams: true });
 router.use(authenticateStytchSessionToken)
+router.use(attachUserInfo)
 
 // Requests
 //get all departments
@@ -37,7 +39,7 @@ router.put(
 router.delete(
     '/:deptId',
     authenticateAndAuthorize('department', 'delete'),
-
+    deleteDepartment
 )
 
 module.exports = router

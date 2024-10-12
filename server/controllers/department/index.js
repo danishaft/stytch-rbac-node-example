@@ -9,11 +9,12 @@ const {
 const getDepartments = async (req, res) => {
     try{
         const user = req.user
+        const userInfo = req.userInfo
         if (!user) {
             return res.status(400).json('No user found')
         }
         //get all departments 
-        const departments = await getAllDepartments(user.member.organization_id)
+        const departments = await getAllDepartments(user.member,  userInfo.departmentId)
         res.status(200).json({message: 'success ', departments });
     }catch(error){
         console.error(error)
@@ -66,6 +67,7 @@ const deleteDepartment = async (req, res) => {
     try{
         const deptId = req.params.deptId
         await removeDepartments(deptId)
+        console.log('deleted')
     }catch(error){
         console.error(error)
         res.status(error.status_code || 500).json(
