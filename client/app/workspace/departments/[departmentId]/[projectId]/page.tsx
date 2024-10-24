@@ -50,7 +50,6 @@ export default function ProjectDetails ({params}: ProjectDetailsProps) {
       <PageHead name={`${project?.name}-${department?.slug}`}>
         <div className="flex items-center justify-between gap-5">
           <TooltipButton icon={PlusIcon} tip="Invite"/>
-          <TooltipButton icon={TrashIcon} tip="Delete"/>
           <CreateTask
             defaultValues={createDProjectTaskValues}
             onSubmit={handleCreateDeptProjectTask}

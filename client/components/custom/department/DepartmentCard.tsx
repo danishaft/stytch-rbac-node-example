@@ -17,7 +17,6 @@ interface DepartmentCardProps {
   description: string
 }
 export const DepartmentCard = ({name, description, id, slug}: DepartmentCardProps) => {
-  const router = useRouter()
   const {member: stytchMember, isInitialized} = useStytchMember();
   const user = AppStores.useUserStore((state) => state.userInfo)
   const useDeptStore = AppStores.useDepartmentStore.getState()
@@ -26,12 +25,13 @@ export const DepartmentCard = ({name, description, id, slug}: DepartmentCardProp
   const isAdmin = isInitialized && stytchMember ? getRole(stytchMember) === 'admin' : false;
 
   const {isAuthorized: canDelete} = useStytchIsAuthorized('department', 'delete');
-  const deleteDept = async () => {
+  const deleteDept = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     try {
       console.log('deleting')
       await useDeptStore.removeDepartment(id);
       console.log("Department deleted, attempting to navigate...");
-      router.push('/workspace/departments');
     } catch (error) {
       console.error("Failed to delete department:", error);
     }

@@ -1,3 +1,4 @@
+import { useStytchIsAuthorized } from '@stytch/nextjs/b2b'
 import { createDeptProjectSchema, ICreateDeptProjectSchema } from "@/app/workspace/departments/[departmentId]/validations";
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +26,7 @@ interface DeptProjectFormProps {
 }
 
 export function CreateDepartmentProject({schema, defaultValues, onSubmit, isLoading}: DeptProjectFormProps) {
+  const {isAuthorized: canCreate} = useStytchIsAuthorized('department-project', 'create')
   // Define form
   const form = useForm<ICreateDeptProjectSchema>({
     resolver: zodResolver(schema),
@@ -38,7 +40,7 @@ export function CreateDepartmentProject({schema, defaultValues, onSubmit, isLoad
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size={"sm"} className="bg-newPrimary/80 text-white hover:bg-newPrimary hover:text-white">Create</Button>
+        <Button disabled={!canCreate || isLoading} variant="outline" size={"sm"} className="bg-newPrimary/80 text-white hover:bg-newPrimary hover:text-white">Create</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

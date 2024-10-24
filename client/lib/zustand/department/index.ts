@@ -22,13 +22,13 @@ interface DepartmentStore  {
   fetchDepartmentProjects: (deptId: string) => Promise<void>;
   // addDepartmentProject: () => Promise<void>;
   // updateDepartmentProject: () => Promise<void>;
-  // removeDepartmentProject: () => Promise<void>;
+  removeDepartmentProject: (deptId: string, projectId: string) => Promise<void>;
 
   createDepartmentProjectTask: (data: Partial<DepartmentProjectTask>, deptId: string, projectId: string) => Promise<void>;
   fetchDepartmentProjectTasks: (deptId: string, projectId: string) => Promise<void>;
 //   setDepartmentProjectTasks: () => Promise<void>;
 //   addDepartmentProjectTask: () => Promise<void>;
-//   removeDepartmentProjectTask: () => Promise<void>;
+  removeDepartmentProjectTask: (deptId: string, projectId: string, taskId: string) => Promise<void>;
 
 };
 
@@ -117,6 +117,18 @@ export const useDepartmentStore = create(
           set({ error: error.message, loading: false });
         }
       },
+      removeDepartmentProject: async (deptId, projectId) => {
+        set({loading: true, error: null});
+        try{
+          const response = await fetchApi.delete(`/organizations/departments/${deptId}/projects/${projectId}`)
+          set((state) => ({
+            departmentProjects: state.departmentProjects.filter((project) => project.id !== projectId),
+            loading: false
+          }))
+        }catch(error: any){
+          set({error: error.message, loading: false})
+        }
+      },
 
       createDepartmentProjectTask: async (data, deptId, projectId) => {
         set({ loading: true, error: null });
@@ -140,7 +152,18 @@ export const useDepartmentStore = create(
           set({ error: error.message, loading: false });
         }
       },
-
+      removeDepartmentProjectTask: async (deptId, projectId, taskId) => {
+        set({loading: true, error: null});
+        try{
+          const response = await fetchApi.delete(`/organizations/departments/${deptId}/projects/${projectId}/tasks/${taskId}`)
+          set((state) => ({
+            departmentProjects: state.departmentProjects.filter((project) => project.id !== projectId),
+            loading: false
+          }))
+        }catch(error: any){
+          set({error: error.message, loading: false})
+        }
+      }
     }),
     {
       name: "department",

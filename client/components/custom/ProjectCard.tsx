@@ -1,7 +1,10 @@
 import { ProjectDataType } from "@/app/utils/types/Types";
 import { AssignButton } from "@/components/ui/buttons/assignButton";
-import { LapTimerIcon, TargetIcon } from "@radix-ui/react-icons";
+import { LapTimerIcon, TargetIcon, TrashIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { TooltipButton } from "../ui/buttons/tooltipButton";
+import { useStytchIsAuthorized } from "@stytch/nextjs/b2b";
+import { AppStores } from "@/lib/zustand";
 
 interface ProjectCardProps{
     id: string;
@@ -14,6 +17,7 @@ interface ProjectCardProps{
 export const ProjectCard = ({ id, departmentId, name, identifier, description }: ProjectCardProps) => {
   console.log(departmentId, id)
   const projectId = id
+  const useDeptStore = AppStores.useDepartmentStore.getState()
   const getProjectLink = () => {
     switch (identifier) {
       case "private":
@@ -22,6 +26,24 @@ export const ProjectCard = ({ id, departmentId, name, identifier, description }:
         return `/workspace/project/public/${projectId}`;
       default:
         return `/workspace/departments/${departmentId}/${projectId}`;
+    }
+  };
+
+  const {isAuthorized: canDelete} = useStytchIsAuthorized('department-project', 'delete');
+  const deleteDeptProject = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!departmentId) {
+      console.error("Cannot delete project: departmentId is undefined");
+      return;
+    }
+    try {
+      console.log('deleting')
+      await useDeptStore.removeDepartmentProject(departmentId, id);
+      console.log("Department deleted, attempting to navigate...");
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete department:", error);
     }
   };
 
@@ -43,7 +65,16 @@ export const ProjectCard = ({ id, departmentId, name, identifier, description }:
               <p>Lead: </p>
               <AssignButton/>
             </span>
-            <div className="flex items-center gap-1 page-text-3 font-normal text-dark2"><TargetIcon/><p>{3} Tasks</p></div>
+            <div className="flex items-center gap-1 page-text-3 font-normal text-dark2">
+              <TargetIcon/>
+              <p>{3} Tasks</p>
+            </div>
+            <TooltipButton 
+              icon={TrashIcon} 
+              tip="Delete"
+              disabled={!canDelete || useDeptStore.loading}
+              onClick={deleteDeptProject}
+            />
           </div>
         </div>
       </Link>
