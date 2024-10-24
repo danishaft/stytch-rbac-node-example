@@ -2,7 +2,8 @@ const { Router } = require('express')
 
 const {
     getAllDeptProjectTasks,
-    createDeptProjectTask
+    createDeptProjectTask,
+    deleteDeptProjectTask
 } = require('../../controllers/department/projectTasks')
 
 //middleware
@@ -28,6 +29,12 @@ router.post(
     '/',
     authenticateAndAuthorize('department-project-task', 'create'),
     createDeptProjectTask
+)
+//delete department project task
+router.delete(
+    '/:taskId',
+    authenticateAndAuthorize('department-project-task', 'delete'),
+    deleteDeptProjectTask
 )
 
 module.exports = router

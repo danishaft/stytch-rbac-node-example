@@ -40,7 +40,24 @@ const addDeptProject = async (project, deptId) => {
     }
 }
 
+const removeDeptProject = async (projectId, deptId) => {
+    try{
+        await prisma.departmentProject.delete({
+            where: {
+                id: projectId,
+                departmentId: deptId
+            }
+        })
+    }catch (error){
+        console.error(error.message)
+        throw new Error('Could not remove department project', error.message)
+    }finally{
+        await prisma.$disconnect()
+    }
+}
+
 module.exports ={
     getDeptprojects,
-    addDeptProject
+    addDeptProject,
+    removeDeptProject
 }

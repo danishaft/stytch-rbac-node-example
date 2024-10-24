@@ -1,6 +1,7 @@
 const {
     getDeptProjectTasks,
-    addDeptProjectTask
+    addDeptProjectTask,
+    removeDeptProjectTask
 } = require('../../helpers/department/projectTasks')
 
 //get all department project task
@@ -38,8 +39,22 @@ const createDeptProjectTask = async (req, res) => {
     }
 }
 
+const deleteDeptProjectTask = async (req, res) => {
+    try{
+        const {projectId, taskId} = req.params
+        await removeDeptProjectTask(projectId, taskId)
+        console.log('deleted')
+    }catch(error){
+        console.error(error)
+        res.status(error.status_code || 500).json(
+			error.error_type || 'Error deleting department project',
+        )
+    }
+}
+
 
 module.exports = {
     createDeptProjectTask,
-    getAllDeptProjectTasks
+    getAllDeptProjectTasks,
+    deleteDeptProjectTask
 }

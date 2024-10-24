@@ -1,7 +1,8 @@
 const { Router } = require('express')
 const {
     getAllDeptProjects,
-    createDepartmentProject
+    createDepartmentProject,
+    deleteDepartmentProject
 } = require('../../controllers/department/projects')
 
 
@@ -29,6 +30,12 @@ router.post(
     '/',
     authenticateAndAuthorize('department-project', 'create'),
     createDepartmentProject
+)
+//delete department project
+router.delete(
+    '/:projectId',
+    authenticateAndAuthorize('department-project', 'delete'),
+    deleteDepartmentProject
 )
 
 
